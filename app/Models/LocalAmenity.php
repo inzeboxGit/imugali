@@ -20,6 +20,7 @@ class LocalAmenity extends Model
         'description',
         'image_path',
         'link_url',
+        'price',
         'display_context',
         'sort_order',
         'is_published',

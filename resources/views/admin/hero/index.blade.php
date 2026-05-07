@@ -34,13 +34,14 @@
         @endphp
 
         <div class="row g-3">
-            <div class="col-12">
+            <!-- formulaire section –––––––––––––––––––––– -->
+            <!-- <div class="col-12">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="hero_show_booking_form" name="show_booking_form" value="1" {{ old('show_booking_form', $heroSetting->show_booking_form ?? false) ? 'checked' : '' }}>
                     <label class="form-check-label" for="hero_show_booking_form">Afficher le formulaire de recherche</label>
                 </div>
-            </div>
-            <div class="col-12">
+            </div> -->
+            <!-- <div class="col-12">
                 <label class="form-label d-block mb-2">Libellés du formulaire de recherche</label>
                 <ul class="nav nav-tabs" id="booking-labels-tabs" role="tablist">
                     @foreach($locales as $localeKey => $localeLabel)
@@ -85,7 +86,7 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-4">
                 <label class="form-label">Petit titre</label>
                 <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $heroSetting->small_title ?? '') }}">
@@ -138,9 +139,15 @@
             </div>
             <div class="col-12" id="hero_background_image_field">
                 <label class="form-label">Image d'arriere-plan</label>
+                @if(!empty($backgroundSrc))
+                    <div class="mb-2">
+                        <img src="{{ $backgroundSrc }}" alt="Image d'arriere-plan actuelle" class="rounded" style="max-height:160px; object-fit:cover; display:block;">
+                        <div class="form-text">Image actuelle</div>
+                    </div>
+                @endif
                 <input type="file" name="background_image" id="hero_background_image" class="form-control" accept="image/*">
                 <div class="mt-2">
-                    <img id="hero_background_preview" src="{{ $backgroundSrc ?? '' }}" alt="" class="rounded" style="max-height:120px;{{ empty($backgroundSrc) ? 'display:none;' : '' }}">
+                    <img id="hero_background_preview" src="" alt="" class="rounded" style="max-height:120px; display:none;">
                 </div>
             </div>
             <div class="col-12">
@@ -211,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <div class="admin-card p-4 mt-4">
-    <h2 class="h5 mb-3">Section image d'ambiance</h2>
+    <h2 class="h5 mb-3">Section image d'ambiance apres about</h2>
     <form action="{{ route('admin.hero.video-section.update') }}" method="post" enctype="multipart/form-data">
         @csrf
         @php
@@ -244,6 +251,63 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const input = document.getElementById('home_video_header_image');
     const preview = document.getElementById('home_video_header_preview');
+
+    if (!input || !preview) return;
+
+    input.addEventListener('change', function (event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    });
+});
+</script>
+
+<div class="admin-card p-4 mt-4">
+    <h2 class="h5 mb-3">Section Avant le pied de page</h2>
+    <form action="{{ route('admin.hero.before-footer.update') }}" method="post" enctype="multipart/form-data">
+        @csrf
+        @php
+            $beforeFooterImageSrc = media_url($beforeFooterSetting->header_image ?? null, null);
+        @endphp
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Sous-titre</label>
+                <input type="text" name="subtitle" class="form-control" value="{{ old('subtitle', $beforeFooterSetting->subtitle ?? '') }}">
+            </div>
+            <div class="col-md-8">
+                <label class="form-label">Titre</label>
+                <input type="text" name="title" class="form-control" value="{{ old('title', $beforeFooterSetting->title ?? '') }}">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Image</label>
+                @if(!empty($beforeFooterImageSrc))
+                    <div class="mb-2">
+                        <img src="{{ $beforeFooterImageSrc }}" alt="Image before_footer actuelle" class="rounded" style="max-height:160px; object-fit:cover; display:block;">
+                        <div class="form-text">Image actuelle</div>
+                    </div>
+                @endif
+                <input type="file" name="header_image" id="before_footer_header_image" class="form-control" accept="image/*">
+                <div class="mt-2">
+                    <img id="before_footer_header_preview" src="" alt="" class="rounded" style="max-height:140px; display:none;">
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('before_footer_header_image');
+    const preview = document.getElementById('before_footer_header_preview');
 
     if (!input || !preview) return;
 

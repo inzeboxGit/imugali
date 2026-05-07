@@ -29,6 +29,6 @@ class RoomController extends Controller
             ->limit(3)
             ->get();
 
-        return view('rooms.show', compact('room', 'similarRooms'));
+        return themed_view('rooms.show', compact('room', 'similarRooms'));
     }
 }

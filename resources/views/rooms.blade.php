@@ -119,7 +119,7 @@
                                 <h2>{{ method_exists($room, 't') ? $room->t('title') : $room->title }}</h2>
                                 <p
                                     style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
-                                    {{ $roomExcerpt }}
+                                    {!! $roomExcerpt !!}
                                 </p>
                                 <div class="facilities clearfix">
                                     <ul>

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AboutSectionSetting;
 use App\Models\Amenity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class AmenityController extends Controller
 {
@@ -22,7 +25,38 @@ class AmenityController extends Controller
             ->orderBy('title')
             ->get();
 
-        return view('admin.amenities.index', compact('amenities', 'installations'));
+        $activitesAboutSetting = (object) [
+            'small_title' => 'Détente & Loisirs',
+            'title' => 'À propos de nos activités',
+            'description' => '',
+            'main_image' => '',
+            'overlay_image' => '',
+            'third_image' => '',
+        ];
+
+        $activitesGallerySetting = (object) [
+            'small_title' => 'Espace Loisirs',
+            'title' => 'Galerie des Activités',
+        ];
+
+        if (Schema::hasTable('about_section_settings')) {
+            $activitesAboutSetting = AboutSectionSetting::firstOrCreate(
+                ['section' => 'activites_about'],
+                [
+                    'small_title' => 'Détente & Loisirs',
+                    'title' => 'À propos de nos activités',
+                ]
+            );
+            $activitesGallerySetting = AboutSectionSetting::firstOrCreate(
+                ['section' => 'activites_gallery'],
+                [
+                    'small_title' => 'Espace Loisirs',
+                    'title' => 'Galerie des Activités',
+                ]
+            );
+        }
+
+        return view('admin.amenities.index', compact('amenities', 'installations', 'activitesAboutSetting', 'activitesGallerySetting'));
     }
 
     /**
@@ -92,5 +126,81 @@ class AmenityController extends Controller
             'icon' => ['nullable', 'string', 'max:255'],
             'scope' => ['required', 'in:room,both'],
         ]);
+    }
+
+    public function updateActivitesAbout(Request $request)
+    {
+        if (! Schema::hasTable('about_section_settings')) {
+            return redirect()->route('admin.amenities.index')->with('success', 'Table indisponible.');
+        }
+
+        $data = $request->validate([
+            'small_title'   => ['nullable', 'string', 'max:255'],
+            'title'         => ['nullable', 'string', 'max:255'],
+            'description'   => ['nullable', 'string'],
+            'main_image'    => ['nullable', 'image', 'max:5120'],
+            'overlay_image' => ['nullable', 'image', 'max:5120'],
+            'third_image'   => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        $setting = AboutSectionSetting::firstOrCreate(['section' => 'activites_about']);
+
+        foreach (['main_image', 'overlay_image', 'third_image'] as $field) {
+            if ($request->hasFile($field)) {
+                if ($setting->$field) {
+                    Storage::disk('public')->delete($setting->$field);
+                }
+                $data[$field] = $request->file($field)->store('activites', 'public');
+            } else {
+                unset($data[$field]);
+            }
+        }
+
+        $setting->update($data);
+
+        return redirect()->route('admin.amenities.index')->with('success', 'Section contenu activités mise à jour.');
+    }
+
+    public function updateActivitesGallery(Request $request)
+    {
+        if (! Schema::hasTable('about_section_settings')) {
+            return redirect()->route('admin.amenities.index')->with('success', 'Table indisponible.');
+        }
+
+        $request->validate([
+            'small_title' => ['nullable', 'string', 'max:255'],
+            'title'       => ['nullable', 'string', 'max:255'],
+            'images.*'    => ['nullable', 'image', 'max:10240'],
+            'remove'      => ['nullable', 'array'],
+            'remove.*'    => ['string'],
+        ]);
+
+        $setting = AboutSectionSetting::firstOrCreate(
+            ['section' => 'activites_gallery'],
+            ['small_title' => 'Espace Loisirs', 'title' => 'Galerie des Activités']
+        );
+
+        $gallery = $setting->gallery ?? [];
+
+        // Remove marked images
+        foreach (($request->input('remove', [])) as $path) {
+            Storage::disk('public')->delete($path);
+            $gallery = array_values(array_filter($gallery, fn($g) => $g !== $path));
+        }
+
+        // Upload new images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $gallery[] = $file->store('activites/gallery', 'public');
+            }
+        }
+
+        $setting->update([
+            'gallery'     => $gallery,
+            'small_title' => $request->input('small_title', $setting->small_title),
+            'title'       => $request->input('title', $setting->title),
+        ]);
+
+        return redirect()->route('admin.amenities.index')->with('success', 'Galerie activités mise à jour.');
     }
 }

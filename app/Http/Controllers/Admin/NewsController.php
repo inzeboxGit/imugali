@@ -144,6 +144,7 @@ class NewsController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', $uniqueSlug],
             'author' => ['nullable', 'string', 'max:255'],
+            'category' => ['nullable', 'string', 'max:255'],
             'published_at' => ['nullable', 'date'],
             'excerpt' => ['nullable', 'string'],
             'body' => ['nullable', 'string'],

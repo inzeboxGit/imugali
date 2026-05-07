@@ -39,7 +39,7 @@ $ui = $labels[$locale] ?? $labels['en'];
                 <div class="title">
                     <small>{{ strtoupper($smallLabel ?: $titleLabel ?: $ui['small']) }}</small>
                     <h3>{{ $titleLabel }}</h3>
-                    <p>{{ method_exists($comodite, 't') ? $comodite->t('description') : $comodite->description }}</p>
+                    <p>{!! method_exists($comodite, 't') ? $comodite->t('description') : $comodite->description !!}</p>
                     @if(!empty($comodite->link_url))
                     <p><a href="{{ $comodite->link_url }}" class="btn_1 mt-1 outline">{{ $ui['read_more'] }}</a></p>
                     @endif

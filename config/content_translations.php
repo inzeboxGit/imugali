@@ -30,7 +30,7 @@ return [
             'display_field' => 'title',
         ],
         'installation_section' => [
-            'label' => 'Section Installations',
+            'label' => 'Service accueil - Section',
             'class' => \App\Models\InstallationSectionSetting::class,
             'fields' => ['subtitle', 'title'],
             'display_field' => 'section',
@@ -42,7 +42,7 @@ return [
             'display_field' => 'section',
         ],
         'restaurant_page' => [
-            'label' => 'Restaurant - Header',
+            'label' => 'Auberge - Header',
             'class' => \App\Models\LocalAmenitySectionSetting::class,
             'fields' => ['subtitle', 'title', 'hero_text'],
             'display_field' => 'section',
@@ -51,7 +51,7 @@ return [
             ],
         ],
         'restaurant_about' => [
-            'label' => 'Restaurant - À propos',
+            'label' => 'Auberge - À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'lead', 'description', 'signature'],
             'wysiwyg_fields' => ['description'],
@@ -61,7 +61,7 @@ return [
             ],
         ],
         'restaurant_extra_text' => [
-            'label' => 'Restaurant - Après À propos',
+            'label' => 'Auberge - Après À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'description'],
             'wysiwyg_fields' => ['description'],
@@ -71,7 +71,7 @@ return [
             ],
         ],
         'restaurant_items' => [
-            'label' => 'Restaurant - Contenu',
+            'label' => 'Auberge - Contenu',
             'class' => \App\Models\LocalAmenity::class,
             'fields' => ['small_title', 'title', 'description'],
             'wysiwyg_fields' => ['description'],
@@ -81,7 +81,7 @@ return [
             ],
         ],
         'pool_page' => [
-            'label' => 'Piscine - Header',
+            'label' => 'Le Domaine - Header',
             'class' => \App\Models\LocalAmenitySectionSetting::class,
             'fields' => ['subtitle', 'title', 'hero_text'],
             'display_field' => 'section',
@@ -90,7 +90,7 @@ return [
             ],
         ],
         'pool_about' => [
-            'label' => 'Piscine - À propos',
+            'label' => 'Le Domaine - À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'lead', 'description', 'signature'],
             'wysiwyg_fields' => ['description'],
@@ -100,7 +100,7 @@ return [
             ],
         ],
         'pool_extra_text' => [
-            'label' => 'Piscine - Après À propos',
+            'label' => 'Le Domaine - Après À propos',
             'class' => \App\Models\AboutSectionSetting::class,
             'fields' => ['small_title', 'title', 'description'],
             'wysiwyg_fields' => ['description'],
@@ -110,13 +110,42 @@ return [
             ],
         ],
         'pool_items' => [
-            'label' => 'Piscine - Contenu',
+            'label' => 'Le Domaine - Contenu',
             'class' => \App\Models\LocalAmenity::class,
             'fields' => ['small_title', 'title', 'description'],
             'wysiwyg_fields' => ['description'],
             'display_field' => 'title',
             'where' => [
                 'display_context' => \App\Models\LocalAmenity::CONTEXT_POOL,
+            ],
+        ],
+        'pool_bottom_section' => [
+            'label' => 'Le Domaine - Section complémentaire',
+            'class' => \App\Models\AboutSectionSetting::class,
+            'fields' => ['title', 'description'],
+            'wysiwyg_fields' => ['description'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'pool_bottom_section',
+            ],
+        ],
+        'activites_about' => [
+            'label' => 'Activités - Section À propos',
+            'class' => \App\Models\AboutSectionSetting::class,
+            'fields' => ['small_title', 'title', 'description'],
+            'wysiwyg_fields' => ['description'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'activites_about',
+            ],
+        ],
+        'activites_gallery' => [
+            'label' => 'Activités - Section Galerie',
+            'class' => \App\Models\AboutSectionSetting::class,
+            'fields' => ['small_title', 'title'],
+            'display_field' => 'section',
+            'where' => [
+                'section' => 'activites_gallery',
             ],
         ],
         'page_headers' => [
@@ -177,7 +206,7 @@ return [
         'news' => [
             'label' => 'Actualités',
             'class' => \App\Models\News::class,
-            'fields' => ['title', 'excerpt', 'body'],
+            'fields' => ['title', 'excerpt', 'body', 'category'],
             'wysiwyg_fields' => ['excerpt', 'body'],
             'display_field' => 'title',
         ],

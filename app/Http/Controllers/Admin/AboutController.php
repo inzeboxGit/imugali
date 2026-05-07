@@ -13,16 +13,21 @@ class AboutController extends Controller
 {
     public function index()
     {
-        $aboutSetting = $this->defaultSetting();
+        $aboutSetting = (object) $this->defaultSetting();
+        $about2Setting = (object) $this->defaultSetting();
 
         if (Schema::hasTable('about_section_settings')) {
             $aboutSetting = AboutSectionSetting::firstOrCreate(
                 ['section' => 'home_about'],
                 $this->defaultSetting()
             );
+            $about2Setting = AboutSectionSetting::firstOrCreate(
+                ['section' => 'home_about2'],
+                $this->defaultSetting()
+            );
         }
 
-        return view('admin.about.index', compact('aboutSetting'));
+        return view('admin.about.index', compact('aboutSetting', 'about2Setting'));
     }
 
     public function update(Request $request)
@@ -42,6 +47,7 @@ class AboutController extends Controller
             'lead' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'signature' => ['nullable', 'string', 'max:255'],
+            'button_link' => ['nullable', 'string', 'max:255'],
             'main_image' => ['nullable', 'image', 'max:5120'],
             'overlay_image' => ['nullable', 'image', 'max:5120'],
         ]);
@@ -68,11 +74,62 @@ class AboutController extends Controller
             'lead' => $data['lead'] ?? $setting->lead,
             'description' => $data['description'] ?? $setting->description,
             'signature' => $data['signature'] ?? $setting->signature,
+            'button_link' => $data['button_link'] ?? $setting->button_link,
             'main_image' => $data['main_image'] ?? $setting->main_image,
             'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
         ]);
 
         return redirect()->route('admin.about.index')->with('success', 'Section À propos mise à jour.');
+    }
+
+    public function update2(Request $request)
+    {
+        if (!Schema::hasTable('about_section_settings')) {
+            return redirect()->route('admin.about.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = AboutSectionSetting::firstOrCreate(
+            ['section' => 'home_about2'],
+            $this->defaultSetting()
+        );
+
+        $data = $request->validate([
+            'small_title' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'lead' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'signature' => ['nullable', 'string', 'max:255'],
+            'button_link' => ['nullable', 'string', 'max:255'],
+            'main_image' => ['nullable', 'image', 'max:5120'],
+            'overlay_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        if ($request->hasFile('main_image')) {
+            if (!empty($setting->main_image) && !str_starts_with($setting->main_image, 'img/')) {
+                Storage::disk('public')->delete($setting->main_image);
+            }
+            $data['main_image'] = $this->storeResizedImage($request->file('main_image'), 'about2', 600, 730);
+        }
+
+        if ($request->hasFile('overlay_image')) {
+            if (!empty($setting->overlay_image) && !str_starts_with($setting->overlay_image, 'img/')) {
+                Storage::disk('public')->delete($setting->overlay_image);
+            }
+            $data['overlay_image'] = $this->storeResizedImage($request->file('overlay_image'), 'about2', 600, 830);
+        }
+
+        $setting->update([
+            'small_title' => $data['small_title'] ?? $setting->small_title,
+            'title' => $data['title'] ?? $setting->title,
+            'lead' => $data['lead'] ?? $setting->lead,
+            'description' => $data['description'] ?? $setting->description,
+            'signature' => $data['signature'] ?? $setting->signature,
+            'button_link' => $data['button_link'] ?? $setting->button_link,
+            'main_image' => $data['main_image'] ?? $setting->main_image,
+            'overlay_image' => $data['overlay_image'] ?? $setting->overlay_image,
+        ]);
+
+        return redirect()->route('admin.about.index')->with('success', 'Section À propos 2 mise à jour.');
     }
 
     private function defaultSetting(): array
@@ -83,6 +140,7 @@ class AboutController extends Controller
             'lead' => '',
             'description' => "",
             'signature' => '',
+            'button_link' => '',
             'main_image' => '',
             'overlay_image' => '',
         ];

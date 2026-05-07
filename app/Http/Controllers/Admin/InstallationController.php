@@ -114,6 +114,18 @@ class InstallationController extends Controller
         return redirect()->route('admin.installations.index')->with('success', 'Installation mise à jour.');
     }
 
+    public function destroyImage(string $id)
+    {
+        $installation = Amenity::whereIn('scope', ['home', 'both'])->findOrFail($id);
+
+        if (!empty($installation->image_path)) {
+            Storage::disk('public')->delete($installation->image_path);
+            $installation->update(['image_path' => null]);
+        }
+
+        return redirect()->route('admin.amenities.index')->with('success', 'Image supprimée.');
+    }
+
     public function destroy(string $id)
     {
         $installation = Amenity::whereIn('scope', ['home', 'both'])->findOrFail($id);

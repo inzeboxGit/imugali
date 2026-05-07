@@ -3,10 +3,19 @@
 @section('title', $pageMeta['title'])
 
 @section('content')
+    @php
+        $crudLabels = $pageMeta['crud_labels'] ?? [];
+    @endphp
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div>
             <h1 class="h3 mb-1">{{ $pageMeta['title'] }}</h1>
-            <div class="text-muted">{{ $pageMeta['description'] }}</div>
+            <div class="text-muted">{{ $pageMeta['description'] }} 
+                <a href="#table" class="text-decoration-underline">Menu restaurant</a>
+                 | | 
+                <a href="#table" class="text-decoration-underline">Gallerie restaurant</a>
+
+            </div>
+
         </div>
         <a href="{{ route($pageMeta['routes']['create']) }}" class="btn btn-primary">Ajouter</a>
     </div>
@@ -96,6 +105,9 @@
                     <div class="col-md-6">
                         <label class="form-label">Image principale</label>
                         <input type="file" name="main_image" id="about_main_image" class="form-control" accept="image/*">
+                        @if(($pageMeta['title'] ?? '') === 'Piscine')
+                            <small class="text-muted d-block mt-1">Format requis: 1920 x 1080 px.</small>
+                        @endif
                         <div class="mt-2">
                             <img id="about_main_preview" src="{{ $aboutMainSrc }}" alt="" class="rounded"
                                 style="max-height:100px;">
@@ -120,8 +132,13 @@
     @if($pageMeta['extra_text_section']['enabled'])
         <div class="admin-card p-4 mb-4">
             <h2 class="h5 mb-3">{{ $pageMeta['extra_text_section']['title'] }}</h2>
-            <form action="{{ route($pageMeta['extra_text_section']['route']) }}" method="post">
+            <form action="{{ route($pageMeta['extra_text_section']['route']) }}" method="post" enctype="multipart/form-data">
                 @csrf
+                @php
+                    $extraImageOneSrc = media_url($extraTextSectionSetting->main_image ?? null);
+                    $extraImageTwoSrc = media_url($extraTextSectionSetting->overlay_image ?? null);
+                    $extraImageThreeSrc = media_url($extraTextSectionSetting->third_image ?? null);
+                @endphp
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label">Sous-titre</label>
@@ -138,6 +155,35 @@
                         <textarea name="description" class="form-control"
                             rows="4">{{ old('description', $extraTextSectionSetting->description ?? '') }}</textarea>
                     </div>
+                    @if($pageMeta['extra_text_section']['show_images'])
+                        <div class="col-md-4">
+                            <label class="form-label">Photo 1</label>
+                            <input type="file" name="image_one" id="extra_image_one" class="form-control" accept="image/*">
+                            <small class="text-muted d-block mt-1">Format requis: {{ $pageMeta['extra_text_section']['image_dimensions']['width'] }} x {{ $pageMeta['extra_text_section']['image_dimensions']['height'] }} px.</small>
+                            <div class="mt-2">
+                                <img id="extra_image_one_preview" src="{{ $extraImageOneSrc ?? '' }}" alt="" class="rounded"
+                                    style="max-height:120px;{{ empty($extraImageOneSrc) ? 'display:none;' : '' }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Photo 2</label>
+                            <input type="file" name="image_two" id="extra_image_two" class="form-control" accept="image/*">
+                            <small class="text-muted d-block mt-1">Format requis: {{ $pageMeta['extra_text_section']['image_dimensions']['width'] }} x {{ $pageMeta['extra_text_section']['image_dimensions']['height'] }} px.</small>
+                            <div class="mt-2">
+                                <img id="extra_image_two_preview" src="{{ $extraImageTwoSrc ?? '' }}" alt="" class="rounded"
+                                    style="max-height:120px;{{ empty($extraImageTwoSrc) ? 'display:none;' : '' }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Photo 3</label>
+                            <input type="file" name="image_three" id="extra_image_three" class="form-control" accept="image/*">
+                            <small class="text-muted d-block mt-1">Format requis: {{ $pageMeta['extra_text_section']['image_dimensions']['width'] }} x {{ $pageMeta['extra_text_section']['image_dimensions']['height'] }} px.</small>
+                            <div class="mt-2">
+                                <img id="extra_image_three_preview" src="{{ $extraImageThreeSrc ?? '' }}" alt="" class="rounded"
+                                    style="max-height:120px;{{ empty($extraImageThreeSrc) ? 'display:none;' : '' }}">
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-12">
                         <button class="btn btn-primary" type="submit">Mettre à jour</button>
                     </div>
@@ -146,15 +192,172 @@
         </div>
     @endif
 
-    <div class="admin-card p-3">
+    @if($pageMeta['secondary_extra_section']['enabled'])
+        <div class="admin-card p-4 mb-4">
+            <h2 class="h5 mb-3">{{ $pageMeta['secondary_extra_section']['title'] }}</h2>
+            <form action="{{ route($pageMeta['secondary_extra_section']['route']) }}" method="post" enctype="multipart/form-data">
+                @csrf
+                @php
+                    $secondaryExtraMainSrc = media_url($secondaryExtraSectionSetting->main_image ?? null);
+                    $secondaryExtraOverlaySrc = media_url($secondaryExtraSectionSetting->overlay_image ?? null);
+                @endphp
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Titre</label>
+                        <input type="text" name="title" class="form-control"
+                            value="{{ old('title', $secondaryExtraSectionSetting->title ?? '') }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control"
+                            rows="4">{{ old('description', $secondaryExtraSectionSetting->description ?? '') }}</textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Photo 1</label>
+                        <input type="file" name="main_image" id="secondary_extra_main_image" class="form-control" accept="image/*">
+                        <small class="text-muted d-block mt-1">Format requis: {{ $pageMeta['secondary_extra_section']['main_image_dimensions']['width'] }} x {{ $pageMeta['secondary_extra_section']['main_image_dimensions']['height'] }} px.</small>
+                        <div class="mt-2">
+                            <img id="secondary_extra_main_preview" src="{{ $secondaryExtraMainSrc ?? '' }}" alt="" class="rounded"
+                                style="max-height:120px;{{ empty($secondaryExtraMainSrc) ? 'display:none;' : '' }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Photo 2</label>
+                        <input type="file" name="overlay_image" id="secondary_extra_overlay_image" class="form-control" accept="image/*">
+                        <small class="text-muted d-block mt-1">Format requis: {{ $pageMeta['secondary_extra_section']['overlay_image_dimensions']['width'] }} x {{ $pageMeta['secondary_extra_section']['overlay_image_dimensions']['height'] }} px.</small>
+                        <div class="mt-2">
+                            <img id="secondary_extra_overlay_preview" src="{{ $secondaryExtraOverlaySrc ?? '' }}" alt="" class="rounded"
+                                style="max-height:120px;{{ empty($secondaryExtraOverlaySrc) ? 'display:none;' : '' }}">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Mettre à jour</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    @endif
+
+    @if(($pageMeta['restaurant_info_section']['enabled'] ?? false))
+        <div class="admin-card p-4 mb-4">
+            <h2 class="h5 mb-3">{{ $pageMeta['restaurant_info_section']['title'] }}</h2>
+            <form action="{{ route($pageMeta['restaurant_info_section']['route']) }}" method="post">
+                @csrf
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Titre heures</label>
+                        <input type="text" name="small_title" class="form-control"
+                            value="{{ old('small_title', $restaurantInfoSectionSetting->small_title ?? '') }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Horaires</label>
+                        <textarea name="lead" class="form-control" rows="5">{{ old('lead', $restaurantInfoSectionSetting->lead ?? '') }}</textarea>
+                        <small class="text-muted d-block mt-1">Une ligne par horaire.</small>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Titre dress code</label>
+                        <input type="text" name="title" class="form-control"
+                            value="{{ old('title', $restaurantInfoSectionSetting->title ?? '') }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Texte dress code</label>
+                        <textarea name="description" class="form-control" rows="3">{{ old('description', $restaurantInfoSectionSetting->description ?? '') }}</textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Titre terrasse</label>
+                        <input type="text" name="signature" class="form-control"
+                            value="{{ old('signature', $restaurantInfoSectionSetting->signature ?? '') }}">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Texte terrasse</label>
+                        <textarea name="main_image" class="form-control" rows="3">{{ old('main_image', $restaurantInfoSectionSetting->main_image ?? '') }}</textarea>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Mettre à jour</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    @endif
+
+    @if(($pageMeta['gallery_section']['enabled'] ?? false))
+        <div class="admin-card p-4 mb-4">
+            <h2 class="h5 mb-3">{{ $pageMeta['gallery_section']['title'] }}</h2>
+            <form action="{{ route($pageMeta['gallery_section']['route']) }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Sous-titre</label>
+                        <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $restaurantGallerySetting->small_title ?? 'Image Gallery') }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Titre</label>
+                        <input type="text" name="gallery_title" class="form-control" value="{{ old('gallery_title', $restaurantGallerySetting->title ?? 'Restaurant Gallery') }}">
+                    </div>
+                    {{-- Existing images --}}
+                    @php $galleryImages = $restaurantGallerySetting->gallery ?? []; @endphp
+                    @if(!empty($galleryImages))
+                        <div class="col-12">
+                            <label class="form-label">Images actuelles</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach($galleryImages as $imgPath)
+                                    @php $imgSrc = media_url($imgPath); @endphp
+                                    <div class="position-relative" style="width:120px;">
+                                        <img src="{{ $imgSrc }}" alt="" class="rounded" style="width:120px;height:90px;object-fit:cover;">
+                                        <label class="position-absolute top-0 end-0 m-1 d-flex align-items-center justify-content-center bg-danger rounded-circle" style="width:22px;height:22px;cursor:pointer;" title="Supprimer">
+                                            <input type="checkbox" name="remove[]" value="{{ $imgPath }}" class="d-none gallery-remove-cb">
+                                            <span class="text-white" style="font-size:13px;line-height:1;">&times;</span>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <small class="text-muted d-block mt-1">Cochez la croix rouge pour supprimer une image.</small>
+                        </div>
+                    @endif
+                    <div class="col-12">
+                        <label class="form-label">Ajouter des images</label>
+                        <input type="file" name="images[]" class="form-control" accept="image/*" multiple>
+                        <small class="text-muted d-block mt-1">Format requis : 1080 × 900 px. Plusieurs fichiers acceptés.</small>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="submit">Mettre à jour la galerie</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    @endif
+
+    <div class="admin-card p-3" id="table">
+        <!-- <a href="#table" class="btn btn-outline-secondary mb-3"></a> -->
+        <form method="get" action="{{ route($pageMeta['routes']['index']) }}" class="row g-3 align-items-end mb-3">
+            <div class="col-md-4 col-lg-3">
+                <label for="category" class="form-label mb-1">Filtrer par {{ $crudLabels['table_title'] ?? 'Titre' }}</label>
+                <select name="category" id="category" class="form-select">
+                    <option value="">Tous</option>
+                    @foreach(($categoryOptions ?? collect()) as $categoryOption)
+                        <option value="{{ $categoryOption }}" {{ ($activeCategoryFilter ?? '') === $categoryOption ? 'selected' : '' }}>
+                            {{ $categoryOption }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-outline-primary">Filtrer</button>
+            </div>
+            @if(!empty($activeCategoryFilter))
+                <div class="col-auto">
+                    <a href="{{ route($pageMeta['routes']['index']) }}" class="btn btn-outline-secondary">Réinitialiser</a>
+                </div>
+            @endif
+        </form>
         <div class="table-responsive">
             <table class="table align-middle mb-0">
                 <thead>
                     <tr>
                         <th>Image</th>
-                        <th>Petit titre</th>
-                        <th>Titre</th>
-                        <th>Ordre</th>
+                        <th>{{ $crudLabels['table_small_title'] ?? 'Petit titre' }}</th>
+                        <th>{{ $crudLabels['table_title'] ?? 'Titre' }}</th>
+                        <th>{{ $crudLabels['table_sort_order'] ?? 'Ordre' }}</th>
                         <th>Publiée</th>
                         <th class="text-end">Actions</th>
                     </tr>
@@ -199,7 +402,7 @@
     </div>
 
     <div class="mt-3">
-        {{ $comodites->links() }}
+        {{ $comodites->links('pagination::bootstrap-5') }}
     </div>
 
     <script>
@@ -254,6 +457,11 @@
 
             bindPreview('about_main_image', 'about_main_preview');
             bindPreview('about_overlay_image', 'about_overlay_preview');
+            bindPreview('extra_image_one', 'extra_image_one_preview');
+            bindPreview('extra_image_two', 'extra_image_two_preview');
+            bindPreview('extra_image_three', 'extra_image_three_preview');
+            bindPreview('secondary_extra_main_image', 'secondary_extra_main_preview');
+            bindPreview('secondary_extra_overlay_image', 'secondary_extra_overlay_preview');
         });
     </script>
 @endsection

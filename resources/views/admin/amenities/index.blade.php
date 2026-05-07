@@ -6,7 +6,7 @@
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
         <h1 class="h3 mb-1">Équipements</h1>
-        <div class="text-muted">Liste séparée: équipements chambres et installations homepage</div>
+        <div class="text-muted">Liste séparée: équipements chambres et services homepage (Optionnel si aucun chambre n'est défini)</div>
     </div>
     <a href="{{ route('admin.amenities.create') }}" class="btn btn-primary">Ajouter</a>
 </div>
@@ -67,19 +67,100 @@
 </div>
 
 <div class="mt-3">
-    {{ $amenities->links() }}
+    {{ $amenities->links('pagination::bootstrap-5') }}
+</div>
+
+{{-- Section: Contenu principal page Activités --}}
+<div class="admin-card p-3 mt-4">
+    <h2 class="h5 mb-3">Contenu principal <span class="text-muted fw-normal" style="font-size:.85em">(section "À propos" — page Activités)</span></h2>
+    <form action="{{ route('admin.amenities.activites-about.update') }}" method="post" enctype="multipart/form-data">
+        @csrf
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Sous-titre</label>
+                <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $activitesAboutSetting->small_title ?? '') }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Titre</label>
+                <input type="text" name="title" class="form-control" value="{{ old('title', $activitesAboutSetting->title ?? '') }}">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Description <small class="text-muted">(séparer les paragraphes par une ligne vide)</small></label>
+                <textarea name="description" class="form-control" rows="5">{{ old('description', $activitesAboutSetting->description ?? '') }}</textarea>
+            </div>
+            @foreach([['main_image', 'Image 1'], ['overlay_image', 'Image 2'], ['third_image', 'Image 3']] as [$field, $label])
+            <div class="col-md-4">
+                <label class="form-label">{{ $label }}</label>
+                <input type="file" name="{{ $field }}" class="form-control" accept="image/*">
+                @if(!empty($activitesAboutSetting->$field))
+                    <div class="mt-2">
+                        <img src="{{ asset('storage/' . $activitesAboutSetting->$field) }}" alt="" style="max-height:80px;" class="rounded">
+                    </div>
+                @endif
+            </div>
+            @endforeach
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{{-- Section: Galerie page Activités --}}
+<div class="admin-card p-3 mt-4">
+    <h2 class="h5 mb-3">Galerie <span class="text-muted fw-normal" style="font-size:.85em">(page Activités)</span></h2>
+    <form action="{{ route('admin.amenities.activites-gallery.update') }}" method="post" enctype="multipart/form-data">
+        @csrf
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Sous-titre</label>
+                <input type="text" name="small_title" class="form-control" value="{{ old('small_title', $activitesGallerySetting->small_title ?? '') }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Titre</label>
+                <input type="text" name="title" class="form-control" value="{{ old('title', $activitesGallerySetting->title ?? '') }}">
+            </div>
+            {{-- Images existantes --}}
+            @php $galleryImgs = $activitesGallerySetting->gallery ?? []; @endphp
+            <div class="col-12">
+                <label class="form-label">Images actuelles</label>
+                @if(!empty($galleryImgs))
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach($galleryImgs as $imgPath)
+                    <div class="position-relative" style="width:100px;">
+                        <img src="{{ asset('storage/' . $imgPath) }}" alt="" style="width:100px;height:80px;object-fit:cover;border-radius:6px;">
+                        <div class="form-check mt-1">
+                            <input class="form-check-input" type="checkbox" name="remove[]" value="{{ $imgPath }}" id="rm_act_{{ $loop->index }}">
+                            <label class="form-check-label text-danger small" for="rm_act_{{ $loop->index }}">Supprimer</label>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <p class="text-muted small mb-0">Aucune image uploadée pour le moment.</p>
+                @endif
+            </div>
+            <div class="col-12">
+                <label class="form-label">Ajouter des images</label>
+                <input type="file" name="images[]" class="form-control" multiple accept="image/*">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 <div class="admin-card p-3 mt-4">
     <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="h5 mb-0">Installations principales</h2>
-        <a href="{{ route('admin.installations.index') }}" class="btn btn-sm btn-outline-primary">Gérer installations</a>
+        <h2 class="h5 mb-0">Informations pratiques <span class="text-muted fw-normal" style="font-size:.85em">(page Activités)</span></h2>
+        <a href="{{ route('admin.installations.index') }}" class="btn btn-sm btn-outline-primary">Gérer les services</a>
     </div>
     <div class="table-responsive">
         <table class="table align-middle mb-0">
             <thead>
                 <tr>
-                    <th>Image</th>
+                    <!-- <th>Image</th> -->
                     <th>Icône</th>
                     <th>Titre</th>
                     <th>Ordre</th>
@@ -90,13 +171,20 @@
             <tbody>
                 @forelse($installations as $installation)
                     <tr>
-                        <td>
+                        <!-- <td>
                             @if($installation->image_path)
-                                <img src="{{ asset('storage/' . $installation->image_path) }}" alt="{{ $installation->title }}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="{{ asset('storage/' . $installation->image_path) }}" alt="{{ $installation->title }}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;">
+                                    <form action="{{ route('admin.installations.image.destroy', $installation) }}" method="post" onsubmit="return confirm('Supprimer cette image ?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer l'image">✕</button>
+                                    </form>
+                                </div>
                             @else
                                 <span class="text-muted">-</span>
                             @endif
-                        </td>
+                        </td> -->
                         <td>
                             @if($installation->icon)
                                 <i class="{{ $installation->icon }}"></i>

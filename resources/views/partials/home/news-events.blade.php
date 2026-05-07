@@ -36,7 +36,7 @@
                         <div class="wrapper">
                             <small>{{ $ui['event'] }}<span></span></small>
                             <h2 style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ method_exists($item, 't') ? $item->t('title') : $item->title }}</h2>
-                            <p style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{{ method_exists($item, 't') ? $item->t('excerpt') : $item->excerpt }}</p>
+                            <p style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">{!! method_exists($item, 't') ? $item->t('excerpt') : $item->excerpt !!}</p>
                             <em>{{ $ui['read_more'] }}</em>
                         </div>
                     </a>

@@ -38,7 +38,7 @@
                     <i class="{{ $installation->icon }}"></i>
                 @endif
                 <h3>{{ method_exists($installation, 't') ? $installation->t('title') : $installation->title }}</h3>
-                <p>{{ method_exists($installation, 't') ? $installation->t('description') : $installation->description }}</p>
+                <p>{!! method_exists($installation, 't') ? $installation->t('description') : $installation->description !!}</p>
             </div>
         </div>
     @empty

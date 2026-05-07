@@ -15,6 +15,7 @@ class HomeHeroController extends Controller
     {
         $heroSetting = (object) $this->defaultSetting();
         $homeVideoSetting = $this->defaultVideoSettingObject();
+        $beforeFooterSetting = (object) $this->defaultBeforeFooterSetting();
         $locales = config('content_translations.locales', ['fr' => 'Français']);
 
         if (Schema::hasTable('home_hero_settings')) {
@@ -30,9 +31,14 @@ class HomeHeroController extends Controller
                 ['page' => 'home_video'],
                 $this->defaultVideoSetting()
             );
+
+            $beforeFooterSetting = PageHeaderSetting::firstOrCreate(
+                ['page' => 'before_footer'],
+                $this->defaultBeforeFooterSetting()
+            );
         }
 
-        return view('admin.hero.index', compact('heroSetting', 'homeVideoSetting', 'locales'));
+        return view('admin.hero.index', compact('heroSetting', 'homeVideoSetting', 'beforeFooterSetting', 'locales'));
     }
 
     public function update(Request $request)
@@ -166,6 +172,40 @@ class HomeHeroController extends Controller
         ];
     }
 
+    public function updateBeforeFooter(Request $request)
+    {
+        if (! Schema::hasTable('page_header_settings')) {
+            return redirect()->route('admin.hero.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+        }
+
+        $setting = PageHeaderSetting::firstOrCreate(
+            ['page' => 'before_footer'],
+            $this->defaultBeforeFooterSetting()
+        );
+
+        $data = $request->validate([
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'header_image' => ['nullable', 'image', 'max:5120'],
+        ]);
+
+        if ($request->hasFile('header_image')) {
+            if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
+                Storage::disk('public')->delete($setting->header_image);
+            }
+
+            $data['header_image'] = $request->file('header_image')->store('before-footer', 'public');
+        }
+
+        $setting->update([
+            'subtitle' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
+            'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
+            'header_image' => $data['header_image'] ?? $setting->header_image,
+        ]);
+
+        return redirect()->route('admin.hero.index')->with('success', 'Section before_footer mise à jour.');
+    }
+
     private function defaultVideoSetting(): array
     {
         return [
@@ -180,5 +220,16 @@ class HomeHeroController extends Controller
     private function defaultVideoSettingObject(): object
     {
         return (object) $this->defaultVideoSetting();
+    }
+
+    private function defaultBeforeFooterSetting(): array
+    {
+        return [
+            'page' => 'before_footer',
+            'header_image' => '',
+            'subtitle' => '',
+            'title' => '',
+            'hero_text' => '',
+        ];
     }
 }

@@ -65,7 +65,7 @@ asset('img/local_amenities_3.jpg'),
                         <h3>{{ $extraTitle }}</h3>
                         @endif
                         @if(!empty($extraDescription))
-                        <p>{{ $extraDescription }}</p>
+                        <p>{!! $extraDescription !!}</p>
                         @endif
                     </div>
                     <div class="list_ok">
@@ -73,7 +73,7 @@ asset('img/local_amenities_3.jpg'),
                             @forelse($amenities as $item)
                             <li data-cue="slideInUp" data-delay="{{ 200 + ($loop->index * 100) }}">
                                 <h5>{{ method_exists($item, 't') ? $item->t('title') : $item->title }}</h5>
-                                <p>{{ method_exists($item, 't') ? $item->t('description') : $item->description }}</p>
+                                <p>{!! method_exists($item, 't') ? $item->t('description') : $item->description !!}</p>
                             </li>
                             @empty
                             <li>

@@ -36,7 +36,7 @@ class NewsController extends Controller
             $newsPageSetting->loadMissing('translations');
         }
 
-        return view('news.index', compact('items', 'newsPageSetting'));
+        return themed_view('news.index', compact('items', 'newsPageSetting'));
     }
 
     public function show(News $news)
@@ -54,6 +54,6 @@ class NewsController extends Controller
             ->orderBy('published_at')
             ->first();
 
-        return view('news.show', compact('news', 'nextNews', 'prevNews'));
+        return themed_view('news.show', compact('news', 'nextNews', 'prevNews'));
     }
 }

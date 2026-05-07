@@ -17,7 +17,14 @@ class AboutSectionSetting extends Model
         'lead',
         'description',
         'signature',
+        'button_link',
         'main_image',
         'overlay_image',
+        'third_image',
+        'gallery',
+    ];
+
+    protected $casts = [
+        'gallery' => 'array',
     ];
 }

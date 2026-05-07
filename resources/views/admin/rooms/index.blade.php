@@ -112,7 +112,7 @@
 </div>
 
 <div class="mt-3">
-    {{ $rooms->links() }}
+    {{ $rooms->links('pagination::bootstrap-5') }}
 </div>
 
 <script>

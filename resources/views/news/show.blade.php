@@ -44,7 +44,7 @@
                 <div class="col-lg-8">
                     <div class="box_contents_in">
                         @if(method_exists($news, 't') ? $news->t('excerpt') : $news->excerpt)
-                            <h2 class="mb-4">{{ method_exists($news, 't') ? $news->t('excerpt') : $news->excerpt }}</h2>
+                            <h2 class="mb-4">{!! method_exists($news, 't') ? $news->t('excerpt') : $news->excerpt !!}</h2>
                         @endif
                         @if(method_exists($news, 't') ? $news->t('body') : $news->body)
                             <p>{!! nl2br(e(method_exists($news, 't') ? $news->t('body') : $news->body)) !!}</p>

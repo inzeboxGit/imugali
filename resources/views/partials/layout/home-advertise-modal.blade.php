@@ -38,7 +38,7 @@
                         <h3>{{ method_exists($promoSetting, 't') ? $promoSetting->t('title') : ($promoSetting->title ?? '') }}
                         </h3>
                         @if(!empty($promoSetting->text ?? null))
-                            <p>{{ method_exists($promoSetting, 't') ? $promoSetting->t('text') : $promoSetting->text }}</p>
+                            <p>{!! method_exists($promoSetting, 't') ? $promoSetting->t('text') : $promoSetting->text !!}</p>
                         @endif
                         @if(!empty($promoSetting->button_link ?? null))
                             <a href="{{ $promoSetting->button_link }}" class="btn_1 mt-2 mb-4">{{ $buttonLabel }}</a>

@@ -60,8 +60,8 @@
                             </div>
                             <p class="lead">{{ method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('lead') :
         ($aboutSectionSetting->lead ?? '') }}</p>
-                            <p>{{ method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('description') :
-        ($aboutSectionSetting->description ?? "") }}</p>
+                            <p>{!! method_exists($aboutSectionSetting, 't') ? $aboutSectionSetting->t('description') :
+        ($aboutSectionSetting->description ?? "") !!}</p>
                             <p class="mb-0"><em>{{ method_exists($aboutSectionSetting, 't') ?
         $aboutSectionSetting->t('signature') : ($aboutSectionSetting->signature ?? '') }}</em>
                             </p>
