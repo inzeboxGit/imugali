@@ -45,8 +45,17 @@
         ? ($installationSectionSetting->t('title') ?: ($fallbackTitle[$locale] ?? $fallbackTitle['en']))
         : (($installationSectionSetting->title ?? null) ?: ($fallbackTitle[$locale] ?? $fallbackTitle['en']));
 
-    $description = $fallbackDescription[$locale] ?? $fallbackDescription['en'];
-    $buttonLabel = $buttonLabels[$locale] ?? $buttonLabels['en'];
+    $description = (is_object($installationSectionSetting ?? null) && method_exists($installationSectionSetting, 't'))
+        ? ($installationSectionSetting->t('description') ?: ($fallbackDescription[$locale] ?? $fallbackDescription['en']))
+        : (($installationSectionSetting->description ?? null) ?: ($fallbackDescription[$locale] ?? $fallbackDescription['en']));
+
+    $buttonLabel = (is_object($installationSectionSetting ?? null) && !empty($installationSectionSetting->button_text))
+        ? $installationSectionSetting->button_text
+        : ($buttonLabels[$locale] ?? $buttonLabels['en']);
+
+    $buttonLink = (is_object($installationSectionSetting ?? null) && !empty($installationSectionSetting->button_link))
+        ? $installationSectionSetting->button_link
+        : route('appartements.index');
 @endphp
 
 <section class="amenities section-padding">
@@ -56,7 +65,7 @@
                 <div class="section-subtitle">{{ $subtitle }}</div>
                 <div class="section-title">{{ $title }}</div>
                 <p class="mb-25">{{ $description }}</p>
-                <a href="{{ route('appartements.index') }}" class="button-3">{{ $buttonLabel }}</a>
+                <!-- <a href="{{ $buttonLink }}" class="button-3">{{ $buttonLabel }}</a> -->
             </div>
 
             <div class="col-lg-8 col-md-12">

@@ -29,6 +29,18 @@
                 <input type="text" name="title" class="form-control" value="{{ old('title', $sectionSetting->title ?? '') }}">
             </div>
             <div class="col-12">
+                <label class="form-label">Description</label>
+                <textarea name="description" class="form-control" rows="3">{{ old('description', $sectionSetting->description ?? '') }}</textarea>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Texte du bouton</label>
+                <input type="text" name="button_text" class="form-control" value="{{ old('button_text', $sectionSetting->button_text ?? '') }}" placeholder="Tous les appartements">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Lien du bouton</label>
+                <input type="text" name="button_link" class="form-control" value="{{ old('button_link', $sectionSetting->button_link ?? '') }}" placeholder="/appartements">
+            </div>
+            <div class="col-12">
                 <button class="btn btn-primary" type="submit">Mettre à jour</button>
             </div>
         </div>

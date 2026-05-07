@@ -14,5 +14,8 @@ class InstallationSectionSetting extends Model
         'section',
         'title',
         'subtitle',
+        'description',
+        'button_link',
+        'button_text',
     ];
 }
