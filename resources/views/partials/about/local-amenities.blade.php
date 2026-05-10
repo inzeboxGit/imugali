@@ -10,7 +10,7 @@ $labels = [
 'fallback_alt' => 'Commodité locale',
 ],
 'en' => [
-'subtitle' => 'Residence Bella Vista',
+'subtitle' => 'iMugali',
 'title' => 'Local amenities',
 'desc' => 'Discover restaurants, nature, and culture around the residence.',
 'empty_title' => 'Local amenities',
@@ -18,7 +18,7 @@ $labels = [
 'fallback_alt' => 'Local amenity',
 ],
 'de' => [
-'subtitle' => 'Residence Bella Vista',
+'subtitle' => 'iMugali',
 'title' => 'Lokale Annehmlichkeiten',
 'desc' => 'Entdecken Sie Restaurants, Natur und Kultur rund um die Residenz.',
 'empty_title' => 'Lokale Annehmlichkeiten',
@@ -26,7 +26,7 @@ $labels = [
 'fallback_alt' => 'Lokale Annehmlichkeit',
 ],
 'it' => [
-'subtitle' => 'Residence Bella Vista',
+'subtitle' => 'iMugali',
 'title' => 'Servizi locali',
 'desc' => 'Scopri ristoranti, natura e cultura nei dintorni della residenza.',
 'empty_title' => 'Servizi locali',

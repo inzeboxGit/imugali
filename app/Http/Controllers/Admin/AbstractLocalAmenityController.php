@@ -569,7 +569,7 @@ abstract class AbstractLocalAmenityController extends Controller
     {
         return [
             'header_image' => $this->sectionSettingConfig['header_image'] ?? 'img/home_2.jpg',
-            'subtitle' => $this->sectionSettingConfig['subtitle'] ?? 'Residence Bella Vista',
+            'subtitle' => $this->sectionSettingConfig['subtitle'] ?? 'iMugali',
             'title' => $this->sectionSettingConfig['title'] ?? $this->pageTitle,
             'hero_text' => $this->sectionSettingConfig['hero_text'] ?? null,
         ];

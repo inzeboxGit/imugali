@@ -293,7 +293,7 @@ Route::get('/contacts', function () {
         'header_image' => 'img/hero_home_2.jpg',
         'subtitle' => 'Expérience hôtelière',
         'title' => 'Contact',
-        'availability_small' => 'Residence Bella Vista',
+        'availability_small' => 'iMugali',
         'availability_title' => 'Disponibilité',
         'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
     ];
@@ -305,7 +305,7 @@ Route::get('/contacts', function () {
                 'header_image' => 'img/hero_home_2.jpg',
                 'subtitle' => 'Expérience hôtelière',
                 'title' => 'Contact',
-                'availability_small' => 'Residence Bella Vista',
+                'availability_small' => 'iMugali',
                 'availability_title' => 'Disponibilité',
                 'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
             ]

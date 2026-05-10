@@ -10,9 +10,9 @@
     $emptyText = $emptyLabels[$locale] ?? $emptyLabels['en'];
     $fallbackSubtitle = [
         'fr' => 'Résidence Bella Vista',
-        'en' => 'Residence Bella Vista',
-        'de' => 'Residence Bella Vista',
-        'it' => 'Residence Bella Vista',
+        'en' => 'iMugali',
+        'de' => 'iMugali',
+        'it' => 'iMugali',
     ];
     $fallbackTitle = [
         'fr' => 'Installations principales',

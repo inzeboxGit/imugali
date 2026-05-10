@@ -2,9 +2,9 @@
     $locale = app()->getLocale();
     $labels = [
         'fr' => ['small' => 'Résidence Bella Vista', 'title' => 'Appartements similaires', 'from' => 'À partir de', 'per_night' => '€/nuit', 'on_request' => 'Tarif sur demande', 'empty' => 'Aucun appartement similaire pour le moment.'],
-        'en' => ['small' => 'Residence Bella Vista', 'title' => 'Similar apartments', 'from' => 'From', 'per_night' => 'EUR/night', 'on_request' => 'Price on request', 'empty' => 'No similar apartment at the moment.'],
-        'de' => ['small' => 'Residence Bella Vista', 'title' => 'Ähnliche Apartments', 'from' => 'Ab', 'per_night' => 'EUR/Nacht', 'on_request' => 'Preis auf Anfrage', 'empty' => 'Derzeit keine ähnlichen Apartments.'],
-        'it' => ['small' => 'Residence Bella Vista', 'title' => 'Appartamenti simili', 'from' => 'Da', 'per_night' => 'EUR/notte', 'on_request' => 'Prezzo su richiesta', 'empty' => 'Al momento nessun appartamento simile.'],
+        'en' => ['small' => 'iMugali', 'title' => 'Similar apartments', 'from' => 'From', 'per_night' => 'EUR/night', 'on_request' => 'Price on request', 'empty' => 'No similar apartment at the moment.'],
+        'de' => ['small' => 'iMugali', 'title' => 'Ähnliche Apartments', 'from' => 'Ab', 'per_night' => 'EUR/Nacht', 'on_request' => 'Preis auf Anfrage', 'empty' => 'Derzeit keine ähnlichen Apartments.'],
+        'it' => ['small' => 'iMugali', 'title' => 'Appartamenti simili', 'from' => 'Da', 'per_night' => 'EUR/notte', 'on_request' => 'Prezzo su richiesta', 'empty' => 'Al momento nessun appartamento simile.'],
     ];
     $ui = $labels[$locale] ?? $labels['en'];
 @endphp

@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $siteSetting = (object) [
-            'site_name' => 'Residence Bella Vista',
+            'site_name' => 'iMugali',
             'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
             'email' => 'info@residence-bellavista.com',
             'use_site_email_for_contact' => true,
@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
         try {
             if (Schema::hasTable('site_settings')) {
                 $defaults = [
-                    'site_name' => 'Residence Bella Vista',
+                    'site_name' => 'iMugali',
                     'address' => "3 place de l'Eglise, 20220 SANTA REPARATA DI BALAGNA",
                     'email' => 'info@residence-bellavista.com',
                     'use_site_email_for_contact' => true,
