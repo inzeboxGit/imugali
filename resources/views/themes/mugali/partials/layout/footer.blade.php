@@ -2,13 +2,36 @@
     $translatedAddress = method_exists($siteSetting, 't') ? $siteSetting->t('address') : ($siteSetting->address ?? '');
     $siteName = method_exists($siteSetting, 't') ? $siteSetting->t('site_name') : ($siteSetting->site_name ?? 'Mugali');
 @endphp
+<style>
+    .footer,
+    .footer .top,
+    .footer .bottom {
+        background: #fff !important;
+        color: #1f1f1f !important;
+    }
+
+    .footer h3,
+    .footer p,
+    .footer a,
+    .footer .phone a,
+    .footer .mail a,
+    .footer .links ul li a {
+        color: #1f1f1f !important;
+    }
+
+    .footer .bottom {
+        border-top: 1px solid #e5e5e5;
+    }
+</style>
 <footer class="footer">
     <div class="top">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-30">
                     <div class="item">
-                        <div class="logo"><img src="{{ theme_asset('img/logo.png') }}" alt="{{ $siteName }}"></div>
+                        <div class="logo">
+                            <img src="{{ theme_asset('img/logo.png') }}" alt="{{ $siteName }}">
+                        </div>
                         <p>{{ $siteName }}</p>
                         <div class="social-icons">
                             <ul class="list-inline">

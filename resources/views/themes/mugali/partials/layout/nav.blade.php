@@ -104,8 +104,9 @@
                         @endforeach
                     </ul>
                 </div>
-                <div class="button"><a href="{{ route('appartements.index') }}"><i
-                            class="fa-light fa-calendar-check"></i> {{ $t['book'] }}</a></div>
+                <!-- <div class="button"><a href="{{ route('appartements.index') }}">
+                    <i class="fa-light fa-calendar-check"></i> {{ $t['book'] }}</a>
+                </div> -->
             </div>
         </div>
     </div>
