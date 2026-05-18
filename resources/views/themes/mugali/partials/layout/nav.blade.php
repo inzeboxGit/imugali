@@ -70,10 +70,11 @@
 
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item"><a class="nav-link {{ $isHome ? 'active' : '' }}" href="{{ url('/') }}">{{ $t['home'] }}</a>
+                <li class="nav-item"><a class="nav-link {{ $isHome ? 'active' : '' }}"
+                        href="{{ url('/') }}">{{ $t['home'] }}</a>
                 </li>
                 <li class="nav-item"><a class="nav-link {{ $isPool ? 'active' : '' }}"
-                    href="{{ route('pool.index') }}">{{ $t['domain'] }}</a></li>
+                        href="{{ route('pool.index') }}">{{ $t['domain'] }}</a></li>
                 <li class="nav-item"><a class="nav-link {{ $isRestaurant ? 'active' : '' }}"
                         href="{{ route('restaurant.index') }}">{{ $t['auberge'] }}</a></li>
                 <li class="nav-item"><a class="nav-link {{ $isActivites ? 'active' : '' }}"
@@ -104,9 +105,11 @@
                         @endforeach
                     </ul>
                 </div>
-                <!-- <div class="button"><a href="{{ route('appartements.index') }}">
-                    <i class="fa-light fa-calendar-check"></i> {{ $t['book'] }}</a>
-                </div> -->
+                <div class="button" style="visibility: hidden; pointer-events: none;">
+                    <a href="{{ route('appartements.index') }}">
+                        <i class="fa-light fa-calendar-check"></i> {{ $t['book'] }}
+                    </a>
+                </div>
             </div>
         </div>
     </div>

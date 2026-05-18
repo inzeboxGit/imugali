@@ -9,10 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ theme_asset('css/plugins/font-awesome-pro.css') }}?v={{ time() }}">
-    <link rel="stylesheet" href="{{ theme_asset('css/plugins.css') }}?v={{ time() }}">
-    <link rel="stylesheet" href="{{ theme_asset('css/style.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ theme_asset('css/plugins/font-awesome-pro.css') }}?v=1.0.3">
+    <link rel="stylesheet" href="{{ theme_asset('css/plugins.css') }}?v=1.0.3">
+    <link rel="stylesheet" href="{{ theme_asset('css/style.css') }}?v=1.0.3">
     {!! $siteSetting->custom_head_scripts ?? '' !!}
+    @stack('styles')
 </head>
 <body class="front-theme-{{ current_front_theme() }}">
     <div class="preloader">
@@ -24,6 +25,18 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var loader = document.querySelector('.preloader');
+            if (loader) {
+                loader.style.transition = 'opacity 0.25s ease';
+                loader.style.opacity = '0';
+                setTimeout(function() {
+                    loader.style.display = 'none';
+                }, 250);
+            }
+        });
+    </script>
 
     <div class="progress-wrap cursor-pointer">
         <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
@@ -37,22 +50,22 @@
 
     @include('themes.mugali.partials.layout.footer')
 
-    <script src="{{ theme_asset('js/jquery-3.7.1.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/jquery-migrate-3.4.1.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/modernizr-2.6.2.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/imagesloaded.pkgd.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/jquery.isotope.v3.0.2.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/popper.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/bootstrap.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/scrollIt.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/jquery.waypoints.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/owl.carousel.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/jquery.stellar.min.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/jquery.magnific-popup.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/YouTubePopUp.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/select2.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/datepicker.js') }}?v={{ time() }}"></script>
-    <script src="{{ theme_asset('js/custom.js') }}?v={{ time() }}"></script>
+    <script src="{{ theme_asset('js/jquery-3.7.1.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/jquery-migrate-3.4.1.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/modernizr-2.6.2.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/imagesloaded.pkgd.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/jquery.isotope.v3.0.2.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/popper.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/bootstrap.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/scrollIt.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/jquery.waypoints.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/owl.carousel.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/jquery.stellar.min.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/jquery.magnific-popup.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/YouTubePopUp.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/select2.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/datepicker.js') }}?v=1.0.3"></script>
+    <script src="{{ theme_asset('js/custom.js') }}?v=1.0.3"></script>
     @stack('scripts')
 </body>
 </html>

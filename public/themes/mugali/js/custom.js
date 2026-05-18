@@ -1,33 +1,4 @@
-/* ===========================================
 
-01. ScrollIt
-02. Preloader
-03. Navbar scrolling background
-04. Close navbar-collapse when a clicked
-05. Custom owl-nav
-06. Sections data-background image
-07. Slider & Slider-Fade owlCarousel
-08. Image Gallery Scroll owlCarousel
-09. Clients owlCarousel
-10. Testimonials owlCarousel
-11. Rooms 1 owlCarousel
-12. Rooms 2 owlCarousel
-13. Rooms 3 owlCarousel
-14. Blog 1 owlCarousel
-15. Restaurant Menu owlCarousel
-16. Restaurant Menu Tabs
-17. Magnific Popup
-18. Accordion (F.A.Qs)
-19. Animations
-20. Video Text
-21. Pricing
-22. Offers 2
-23. Services Accordion
-24. YouTubePopUp
-25. Scroll back to top
-26. Button
-
-=========================================== */
 
 $(function () {
     "use strict";
@@ -45,9 +16,7 @@ $(function () {
     });
     
     // Preloader
-    $(window).load(function() {
-        $('.preloader').delay(100).fadeOut("slow");
-    });
+    $('.preloader').fadeOut("fast");
 
     // Navbar scrolling background
     wind.on("scroll", function () {

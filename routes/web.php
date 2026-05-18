@@ -56,15 +56,15 @@ Route::get('/', function () {
 
     $newsPageSetting = (object) [
         'subtitle' => 'Dernières nouvelles',
-        'title'    => 'Actualités',
+        'title' => 'Actualités',
     ];
     if (\Illuminate\Support\Facades\Schema::hasTable('page_header_settings')) {
         $newsPageSetting = \App\Models\PageHeaderSetting::firstOrCreate(
             ['page' => 'news'],
             [
-                'subtitle'     => 'Dernières nouvelles',
-                'title'        => 'Actualités',
-                'hero_text'    => '',
+                'subtitle' => 'Dernières nouvelles',
+                'title' => 'Actualités',
+                'hero_text' => '',
                 'header_image' => 'img/hero_home_2.jpg',
             ]
         );
@@ -679,7 +679,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('installations', \App\Http\Controllers\Admin\InstallationController::class)->names('admin.installations');
         Route::post('installations/section-settings', [\App\Http\Controllers\Admin\InstallationController::class, 'updateSectionSettings'])->name('admin.installations.section-settings.update');
         Route::delete('installations/{installation}/image', [\App\Http\Controllers\Admin\InstallationController::class, 'destroyImage'])->name('admin.installations.image.destroy');
-        Route::resource('        git push -u origin updates', \App\Http\Controllers\Admin\PoolAmenityController::class)->names('admin.pool');
+        Route::resource('domaine', \App\Http\Controllers\Admin\PoolAmenityController::class)->names('admin.pool');
         Route::post('domaine/section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateSectionSettings'])->name('admin.pool.section-settings.update');
         Route::post('domaine/about-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateAboutSectionSettings'])->name('admin.pool.about-section-settings.update');
         Route::post('domaine/extra-text-section-settings', [\App\Http\Controllers\Admin\PoolAmenityController::class, 'updateExtraTextSectionSettings'])->name('admin.pool.extra-text-section-settings.update');

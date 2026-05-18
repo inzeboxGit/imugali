@@ -19,7 +19,7 @@ return [
         'home_hero' => [
             'label' => 'Hero accueil',
             'class' => \App\Models\HomeHeroSetting::class,
-            'fields' => ['small_title', 'title', 'dates_label', 'adults_label', 'children_label', 'search_label'],
+            'fields' => ['small_title', 'title', 'button_text', 'dates_label', 'adults_label', 'children_label', 'search_label'],
             'display_field' => 'section',
         ],
         'promo_section' => [

@@ -12,26 +12,13 @@ class SiteSettingController extends Controller
 {
     public function index()
     {
-        $siteSetting = $this->defaultSetting();
-        $locales = config('content_translations.locales', ['fr' => 'Français']);
-        $frontThemes = $this->availableFrontThemes();
-        $supportsFooterBackgroundImage = Schema::hasTable('site_settings')
-            && Schema::hasColumn('site_settings', 'footer_background_image');
-
-        if (Schema::hasTable('site_settings')) {
-            $siteSetting = SiteSetting::firstOrCreate(
-                ['setting_key' => 'general'],
-                $this->databaseDefaults()
-            );
-        }
-
-        return view('admin.settings.index', compact('siteSetting', 'locales', 'frontThemes', 'supportsFooterBackgroundImage'));
+        return redirect()->route('admin.contact.index');
     }
 
     public function update(Request $request)
     {
         if (!Schema::hasTable('site_settings')) {
-            return redirect()->route('admin.settings.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
+            return redirect()->route('admin.contact.index')->with('success', 'Table des paramètres indisponible sur cet environnement.');
         }
 
         $supportsFooterBackgroundImage = Schema::hasColumn('site_settings', 'footer_background_image');
@@ -101,7 +88,7 @@ class SiteSettingController extends Controller
 
         $setting->update($data);
 
-        return redirect()->route('admin.settings.index')->with('success', 'Paramètres mis à jour.');
+        return redirect()->route('admin.contact.index')->with('success', 'Paramètres généraux mis à jour.');
     }
 
     private function defaultSetting(): array

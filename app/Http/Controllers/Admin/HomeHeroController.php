@@ -59,6 +59,7 @@ class HomeHeroController extends Controller
             'adults_label' => ['nullable', 'string', 'max:255'],
             'children_label' => ['nullable', 'string', 'max:255'],
             'search_label' => ['nullable', 'string', 'max:255'],
+            'button_text' => ['nullable', 'string', 'max:255'],
             'button_link' => ['nullable', 'string', 'max:2048'],
             'button_target' => ['nullable', 'in:_self,_blank'],
             'background_type' => ['required', 'in:video,image'],
@@ -93,6 +94,7 @@ class HomeHeroController extends Controller
             'adults_label' => $data['adults_label'] ?? $setting->adults_label,
             'children_label' => $data['children_label'] ?? $setting->children_label,
             'search_label' => $data['search_label'] ?? $setting->search_label,
+            'button_text' => $data['button_text'] ?? $setting->button_text,
             'button_link' => $data['button_link'] ?? $setting->button_link,
             'button_target' => $data['button_target'] ?? $setting->button_target,
             'background_type' => $data['background_type'] ?? ($setting->background_type ?? 'video'),
@@ -101,7 +103,7 @@ class HomeHeroController extends Controller
             'background_image' => $data['background_image'] ?? $setting->background_image,
         ]);
 
-        $translatedFields = ['dates_label', 'adults_label', 'children_label', 'search_label'];
+        $translatedFields = ['button_text', 'dates_label', 'adults_label', 'children_label', 'search_label'];
         $translationPayload = $request->input('translations', []);
         $locales = array_keys(config('content_translations.locales', ['fr' => 'Français']));
 
@@ -163,6 +165,7 @@ class HomeHeroController extends Controller
             'adults_label' => 'Adultes',
             'children_label' => 'Enfants',
             'search_label' => 'Rechercher',
+            'button_text' => 'Découvrir Le Domaine',
             'button_link' => '',
             'button_target' => '_self',
             'background_type' => 'video',

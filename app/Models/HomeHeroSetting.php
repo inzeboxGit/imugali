@@ -20,6 +20,7 @@ class HomeHeroSetting extends Model
         'children_label',
         'search_label',
         'button_link',
+        'button_text',
         'button_target',
         'background_type',
         'background_video',

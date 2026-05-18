@@ -12,7 +12,9 @@
         'de' => 'Entdecken Sie das Anwesen',
         'it' => 'Scopri la Tenuta',
     ];
-    $heroButtonLabel = $heroButtonLabels[$locale] ?? $heroButtonLabels['en'];
+    $heroButtonLabel = method_exists($heroSetting, 't')
+        ? ($heroSetting->t('button_text') ?: ($heroSetting->button_text ?: ($heroButtonLabels[$locale] ?? $heroButtonLabels['en'])))
+        : ($heroSetting->button_text ?? ($heroButtonLabels[$locale] ?? $heroButtonLabels['en']));
     $aboutMain = media_url($aboutSectionSetting->main_image ?? null, 'themes/mugali/img/spa/12.jpg');
     $aboutSmallTitle = method_exists($aboutSectionSetting, 't')
         ? ($aboutSectionSetting->t('small_title') ?: 'À PROPOS DE I MUGALI')
@@ -43,7 +45,12 @@
         ? ($about2SectionSetting->t('description') ?: '')
         : ($about2SectionSetting->description ?? '');
 @endphp
-<section class="banner-header full-height valign bg-img" data-overlay-dark="5" data-background="{{ $heroImage }}">
+
+@push('styles')
+    <link rel="preload" as="image" href="{{ $heroImage }}" fetchpriority="high">
+@endpush
+
+<section class="banner-header full-height valign bg-img" data-overlay-dark="5" data-background="{{ $heroImage }}" style="background-image: url('{{ $heroImage }}');">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-12 text-center">
@@ -61,6 +68,8 @@
 </section>
 
 <!-- About -->
+ <!-- cree un anchor ici -->
+ <a href="#first_section" id="first_section"></a>
 <section class="about section-padding">
     <div class="container">
         <div class="row">
@@ -95,6 +104,8 @@
 
 
 <!-- About 2 -->
+   <!-- cree un anchor ici -->
+ <a href="#second_section" id="second_section"></a>
 @if(!empty($about2Title) || !empty($about2Description))
 <section class="about section-padding">
     <div class="container">

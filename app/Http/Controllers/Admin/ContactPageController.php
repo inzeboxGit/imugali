@@ -18,7 +18,26 @@ class ContactPageController extends Controller
         }
         $locales = config('content_translations.locales', ['fr' => 'Français']);
 
-        return view('admin.contact.index', compact('contactPageSetting', 'locales'));
+        // Load general site settings
+        $siteSetting = null;
+        $frontThemes = $this->availableFrontThemes();
+        $supportsFooterBackgroundImage = false;
+
+        if (Schema::hasTable('site_settings')) {
+            $siteSetting = \App\Models\SiteSetting::firstOrCreate(
+                ['setting_key' => 'general'],
+                $this->siteSettingDefaults()
+            );
+            $supportsFooterBackgroundImage = Schema::hasColumn('site_settings', 'footer_background_image');
+        }
+
+        return view('admin.contact.index', compact(
+            'contactPageSetting', 
+            'locales', 
+            'siteSetting', 
+            'frontThemes', 
+            'supportsFooterBackgroundImage'
+        ));
     }
 
     public function update(Request $request)
@@ -29,11 +48,6 @@ class ContactPageController extends Controller
 
         $setting = $this->resolveSetting();
         $data = $request->validate([
-            'subtitle' => ['nullable', 'string', 'max:255'],
-            'title' => ['nullable', 'string', 'max:255'],
-            'availability_small' => ['nullable', 'string', 'max:255'],
-            'availability_title' => ['nullable', 'string', 'max:255'],
-            'availability_text' => ['nullable', 'string'],
             'info_booking_label' => ['nullable', 'string', 'max:255'],
             'select_room_label' => ['nullable', 'string', 'max:255'],
             'adults_label' => ['nullable', 'string', 'max:255'],
@@ -41,23 +55,9 @@ class ContactPageController extends Controller
             'book_now_label' => ['nullable', 'string', 'max:255'],
             'map_latitude' => ['nullable', 'numeric', 'between:-90,90'],
             'map_longitude' => ['nullable', 'numeric', 'between:-180,180'],
-            'header_image' => ['nullable', 'image', 'max:5120'],
         ]);
 
-        if ($request->hasFile('header_image')) {
-            if (! empty($setting->header_image) && ! str_starts_with($setting->header_image, 'img/')) {
-                Storage::disk('public')->delete($setting->header_image);
-            }
-
-            $data['header_image'] = $request->file('header_image')->store('page-headers', 'public');
-        }
-
         $setting->update([
-            'subtitle' => array_key_exists('subtitle', $data) ? $data['subtitle'] : $setting->subtitle,
-            'title' => array_key_exists('title', $data) ? $data['title'] : $setting->title,
-            'availability_small' => array_key_exists('availability_small', $data) ? $data['availability_small'] : $setting->availability_small,
-            'availability_title' => array_key_exists('availability_title', $data) ? $data['availability_title'] : $setting->availability_title,
-            'availability_text' => array_key_exists('availability_text', $data) ? $data['availability_text'] : $setting->availability_text,
             'info_booking_label' => array_key_exists('info_booking_label', $data) ? $data['info_booking_label'] : $setting->info_booking_label,
             'select_room_label' => array_key_exists('select_room_label', $data) ? $data['select_room_label'] : $setting->select_room_label,
             'adults_label' => array_key_exists('adults_label', $data) ? $data['adults_label'] : $setting->adults_label,
@@ -65,7 +65,6 @@ class ContactPageController extends Controller
             'book_now_label' => array_key_exists('book_now_label', $data) ? $data['book_now_label'] : $setting->book_now_label,
             'map_latitude' => array_key_exists('map_latitude', $data) ? $data['map_latitude'] : $setting->map_latitude,
             'map_longitude' => array_key_exists('map_longitude', $data) ? $data['map_longitude'] : $setting->map_longitude,
-            'header_image' => $data['header_image'] ?? $setting->header_image,
         ]);
 
         $translatedFields = [
@@ -88,7 +87,7 @@ class ContactPageController extends Controller
             }
         }
 
-        return redirect()->route('admin.contact.index')->with('success', 'En-tête de la page contact mise à jour.');
+        return redirect()->route('admin.contact.index')->with('success', 'Paramètres de la page contact mis à jour.');
     }
 
     private function resolveSetting(): object
@@ -97,14 +96,11 @@ class ContactPageController extends Controller
             'page' => 'contact',
             'subtitle' => '',
             'title' => '',
-            'availability_small' => 'iMugali',
-            'availability_title' => 'Disponibilité',
-            'availability_text' => 'Consultez les disponibilités et contactez-nous pour finaliser votre réservation.',
-            'info_booking_label' => 'Infos et réservations',
-            'select_room_label' => 'Sélectionner un appartement',
-            'adults_label' => 'Adultes',
-            'children_label' => 'Enfants',
-            'book_now_label' => 'Réserver maintenant',
+            'info_booking_label' => 'Téléphone',
+            'select_room_label' => 'Prénom',
+            'adults_label' => 'Nom',
+            'children_label' => 'Message',
+            'book_now_label' => 'Envoyer',
             'map_latitude' => 42.6043096,
             'map_longitude' => 8.9295210,
             'header_image' => '',
@@ -118,5 +114,99 @@ class ContactPageController extends Controller
             ['page' => 'contact'],
             $defaults
         );
+    }
+
+    private function siteSettingDefaults(): array
+    {
+        $defaults = [
+            'site_name' => '',
+            'address' => '',
+            'email' => '',
+            'use_site_email_for_contact' => true,
+            'contact_recipient_email' => null,
+            'phone_primary' => '',
+            'phone_secondary' => '',
+            'facebook_url' => '',
+            'instagram_url' => '',
+            'whatsapp_url' => '',
+            'twitter_url' => '',
+            'default_locale' => config('app.locale', 'fr'),
+            'front_theme' => 'default',
+            'maintenance_enabled' => false,
+            'maintenance_message' => '',
+            'custom_head_scripts' => '',
+            'footer_background_image' => '',
+        ];
+
+        if (Schema::hasTable('site_settings')) {
+            if (! Schema::hasColumn('site_settings', 'maintenance_message')) {
+                unset($defaults['maintenance_message']);
+            }
+            if (! Schema::hasColumn('site_settings', 'use_site_email_for_contact')) {
+                unset($defaults['use_site_email_for_contact']);
+            }
+            if (! Schema::hasColumn('site_settings', 'contact_recipient_email')) {
+                unset($defaults['contact_recipient_email']);
+            }
+            if (! Schema::hasColumn('site_settings', 'default_locale')) {
+                unset($defaults['default_locale']);
+            }
+            if (! Schema::hasColumn('site_settings', 'front_theme')) {
+                unset($defaults['front_theme']);
+            }
+            if (! Schema::hasColumn('site_settings', 'custom_head_scripts')) {
+                unset($defaults['custom_head_scripts']);
+            }
+            if (! Schema::hasColumn('site_settings', 'footer_background_image')) {
+                unset($defaults['footer_background_image']);
+            }
+        }
+
+        return $defaults;
+    }
+
+    private function availableFrontThemes(): array
+    {
+        $themes = ['default' => 'Thème actuel'];
+        $themesPath = resource_path('views/themes');
+
+        if (! is_dir($themesPath)) {
+            return $themes;
+        }
+
+        $entries = scandir($themesPath) ?: [];
+
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..') {
+                continue;
+            }
+
+            if (! preg_match('/^[a-z0-9_-]+$/i', $entry)) {
+                continue;
+            }
+
+            if (! is_dir($themesPath . DIRECTORY_SEPARATOR . $entry)) {
+                continue;
+            }
+
+            $key = strtolower($entry);
+
+            if ($key === 'default') {
+                continue;
+            }
+
+            $label = ucwords(str_replace(['-', '_'], ' ', $key));
+            $themes[$key] = $label;
+        }
+
+        ksort($themes);
+
+        if (isset($themes['default'])) {
+            $defaultLabel = $themes['default'];
+            unset($themes['default']);
+            $themes = ['default' => $defaultLabel] + $themes;
+        }
+
+        return $themes;
     }
 }
